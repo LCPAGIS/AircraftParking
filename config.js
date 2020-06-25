@@ -293,7 +293,7 @@ params=
         "label": "Fuselage Length"
     },
     {
-        "name": "Status",
+        "name": "status",
         "label": "Status"
     }
 ]
