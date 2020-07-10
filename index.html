@@ -253,7 +253,9 @@
             "esri/layers/TileLayer",
             "esri/widgets/support/DatePicker",
             "esri/widgets/support/TimePicker",
-
+            "esri/portal/Portal",
+            "esri/identity/OAuthInfo",
+            "esri/identity/IdentityManager",
             // Bootstrap
             "bootstrap/Collapse",
             "bootstrap/Dropdown",
@@ -264,14 +266,35 @@
             "calcite-maps/calcitemaps-arcgis-support-v0.10",
 
             "dojo/domReady!"
-        ], function (Map, MapView, Editor, Home, Zoom, Compass, Search, Legend, BasemapToggle, ScaleBar, Attribution, Expand, Measurement, FeatureLayer, UniqueValueRenderer, GeometryService, ProjectParameters, Basemap, TileLayer, DatePicker, TimePicker, Collapse, Dropdown, CalciteMaps, CalciteMapArcGISSupport) {
+        ], function (Map, MapView, Editor, Home, Zoom, Compass, Search, Legend, BasemapToggle, ScaleBar, Attribution, Expand, Measurement, FeatureLayer, UniqueValueRenderer, GeometryService, ProjectParameters, Basemap, TileLayer, DatePicker, TimePicker, Portal, OAuthInfo, esriId,
+ Collapse, Dropdown, CalciteMaps, CalciteMapArcGISSupport) {
 
             /******************************************************************
              *
              * Create the map, view and widgets
              * 
              ******************************************************************/
+            let authInfo = new OAuthInfo({appId: "l2nJyxCfH94RTpsg", popup: false, portalUrl: "https://lcpa.maps.arcgis.com"});
+            
+            esriId.registerOAuthInfos([authInfo]);
+            esriId.checkSignInStatus(authInfo.portalUrl + "/sharing").then(function (results){
+            loadPortal();
+            })
+            .catch(function (error) {
+                esriId.getCredential
+            (authInfo.portalUrl + "/sharing");
+            });
 
+            loadPortal();
+            function loadPortal() {
+                console.log("authenticated");
+                let portal = new Portal();
+                portal.authMode = "immediate";
+                portal.load().then(loadMap);
+            }
+
+            function loadMap(){
+            
             var value, planeLayer, planeGraphic, highlightSelect, planeLayerView, editor, features, editConfig, addedPlaneOID, highlight, addedPlane, planeNameFromPlaneSelect;
 
             var copyPasteActive = false;
@@ -797,7 +820,7 @@
                     features = mapView.popup.features;
                 }
             });
-
+            }
         });
     </script>
 
